@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from views.users import router as users_router
+from app.views.users import router as users_router
 
 app = FastAPI()
 
