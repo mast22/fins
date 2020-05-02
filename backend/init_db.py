@@ -2,24 +2,38 @@ import os
 import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Base, ExchangeRates
-from session import Session, engine
-from db_config import db_path, sqlite_db_path
+from app.db.models.rate import ExchangeRates
+from app.db.database import Base
+from app.db.database import SessionLocal, engine
+from app.core.config import SQLITE
 
 
 def main(populate=False):
+    """
+    Sometimes you just want to start over without dealing with migrations
+    Drop your db, recreate it, populate with data
+    """
 
-    try:
-        # удаляем если существует
-        os.remove(db_path)
-    except:
-        pass
+    if SQLITE:
+        # in case its sqlite based we import path and db_path with sqlite prefix
+        from app.core.config import location, db_path
 
-    engine = create_engine(sqlite_db_path, echo=True, pool_pre_ping=True)
+        try:
+            # remove if exist
+            os.remove(location)
+        except:
+            pass
+    else:
+        # if its postgres then we connect to it
+        from app.core.config import db_path
+
+        # TODO remove postgres db and recreate it
+
+    engine = create_engine(db_path, echo=True, pool_pre_ping=True)
     Base.metadata.create_all(engine)
 
     if populate:
-        session = Session()
+        session = SessionLocal()
 
         session.add_all(
             [
@@ -172,7 +186,5 @@ def main(populate=False):
         session.commit()
 
 
-if __name__ == '__main__':
-    import sys
-
-    main(populate=(sys.argv[1] == 'pop'))
+if __name__ == "__main__":
+    main(populate=True)
