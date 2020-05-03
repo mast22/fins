@@ -8,3 +8,9 @@ if SQLITE:
     db_path = 'sqlite:///' + location
 else:
     db_path = 'postgresql://root:root@localhost:5432/db'
+
+SECRET_KEY = '123456789CHANGEDINPRODUCTION123456789'
+
+JWT_EXPIRES_MINUTES = 1440
+
+ALGORITHM = "HS256"

@@ -3,6 +3,7 @@ import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.db.models.rate import ExchangeRates
+from app.db.models.user import User
 from app.db.database import Base
 from app.db.database import SessionLocal, engine
 from app.core.config import SQLITE
