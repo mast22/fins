@@ -1,15 +1,15 @@
 from sqlalchemy import Column, String, Integer, Numeric, Date, Boolean
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, relationship, backref
 from app.db.database import Base
 from app.auth.security import hash_pass, verify_pass
 from app.schemas.users import UserCreate
+from sqlalchemy.exc import IntegrityError
+from fastapi.exceptions import HTTPException
 
 
 class User(Base):
-    __tablename__ = 'users'
-
     id = Column(Integer, primary_key=True)
-    email = Column(String, nullable=False)
+    email = Column(String, nullable=False, unique=True)
     password = Column(Integer, nullable=False)
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
@@ -29,6 +29,11 @@ class User(Base):
     def create_user(cls, user: UserCreate, db: Session):
         new_user = cls(email=user.email, password=hash_pass(user.password))
         db.add(new_user)
-        db.commit()
+        try:
+            db.commit()
+        except IntegrityError:
+            raise HTTPException(
+                status_code=400, detail="User with this email already exist"
+            )
         db.refresh(new_user)
         return new_user

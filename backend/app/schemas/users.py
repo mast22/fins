@@ -1,6 +1,6 @@
-from pydantic import BaseModel, EmailStr
-
+from pydantic import BaseModel, EmailStr, validator
 from typing import Optional
+from fastapi.exceptions import HTTPException
 
 
 class BaseUser(BaseModel):
@@ -18,3 +18,12 @@ class User(BaseUser):
 
 class UserCreate(BaseUser):
     password: str
+
+    @validator('password')
+    def password_length(cls, password):
+        PASSWORD_LENGTH = 8
+        if len(password) < PASSWORD_LENGTH:
+            raise HTTPException(
+                status_code=400, detail=f"Password must contain more than {PASSWORD_LENGTH} symbols."
+            )
+        return password

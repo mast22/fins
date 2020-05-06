@@ -14,14 +14,13 @@ router = APIRouter()
 
 
 @router.post('/', response_model=users.User)
-def user_page(user: users.UserCreate, db=Depends(get_db)):
+def create_new_user(user: users.UserCreate, db=Depends(get_db)):
     new_user = UserModel.create_user(user, db)
-
     return new_user
 
 
 @router.post('/token', response_model=tokens.Token)
-def login(
+def get_token(
     form_data: OAuth2PasswordRequestForm = Depends(), db=Depends(get_db),
 ):
     user = UserModel.get_user_by_email(
@@ -30,9 +29,7 @@ def login(
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect password or username")
 
-    access_token = create_access_token(user.id)
-
-    return {'access_token': access_token, 'token_type': 'bearer'}
+    return {'access_token': create_access_token(user.id), 'token_type': 'bearer'}
 
 
 @router.get('/me', response_model=users.User)
