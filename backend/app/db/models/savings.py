@@ -22,12 +22,7 @@ class Savings(Base):
 
     @classmethod
     def get_user_savings(cls, user: User, db: Session):
-        return (
-            db.query(Savings)
-            .filter(Savings.user == user)
-            .order_by(Savings.date.desc())
-            .all()
-        )
+        return db.query(cls).filter(cls.user == user).order_by(cls.date.desc()).all()
 
     # s.query(Savings).filter(Savings.user==u).order_by(Savings.date.desc()).all()
     # from operator import attrgetter

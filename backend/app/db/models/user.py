@@ -13,9 +13,9 @@ class User(Base):
     password = Column(Integer, nullable=False)
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
-    # currency_id = Column(Integer, ForeignKey('currency.id'))
 
-    # default_currency = relationship("Currency")
+    def __repr__(self):
+        return f'<User email={self.email} is_active={self.is_active} is_superuser={self.is_superuser}>'
 
     @classmethod
     def get_user_by_email(cls, email: str, password: str, db: Session):

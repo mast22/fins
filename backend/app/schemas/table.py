@@ -21,43 +21,12 @@ class Day(BaseModel):
     currencies: List[Currency]
 
 
+class Column(BaseModel):
+    currency: str
+    color: str
+    desc: str
+
+
 class Table(BaseModel):
     data: List[Day]
-
-
-# {
-#     "data": [
-#         {
-#             "date": "2020-05-01",
-#             "currencies": [
-#                 {
-#                     "code": "RUB",
-#                     "display": "ruble",
-#                     "amount": 1000,
-#                     "exchange": [
-#                         {"code": "EUR", "price": 85.23,},
-#                         {"code": "USD", "price": 75.23,},
-#                     ],
-#                 },
-#                 {
-#                     "code": "USD",
-#                     "display": "dollar",
-#                     "amount": 500.23,
-#                     "exchange": [
-#                         {"code": "RUB", "price": 0.012,},
-#                         {"code": "USD", "price": 1.12,},
-#                     ],
-#                 },
-#                 {
-#                     "code": "EUR",
-#                     "display": "euro",
-#                     "amount": 200.23,
-#                     "exchange": [
-#                         {"code": "RUB", "price": 0.01,},
-#                         {"code": "EUR", "price": 0.89,},
-#                     ],
-#                 },
-#             ],
-#         },
-#     ],
-# }
+    columns: List[Column]

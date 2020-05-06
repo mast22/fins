@@ -7,7 +7,6 @@ class BaseUser(BaseModel):
     email: EmailStr
     is_active: Optional[bool] = True
     is_superuser: bool = False
-    default_currency: str
 
 
 class User(BaseUser):
@@ -25,6 +24,7 @@ class UserCreate(BaseUser):
         PASSWORD_LENGTH = 8
         if len(password) < PASSWORD_LENGTH:
             raise HTTPException(
-                status_code=400, detail=f"Password must contain more than {PASSWORD_LENGTH} symbols."
+                status_code=400,
+                detail=f"Password must contain more than {PASSWORD_LENGTH} symbols.",
             )
         return password
