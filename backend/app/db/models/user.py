@@ -1,6 +1,6 @@
-from sqlalchemy import Column, String, Integer, Numeric, Date, Boolean
+from sqlalchemy import Column, String, Integer, Numeric, Date, Boolean, ForeignKey
 from sqlalchemy.orm import Session, relationship, backref
-from app.db.database import Base
+from app.db.models import Base
 from app.auth.security import hash_pass, verify_pass
 from app.schemas.users import UserCreate
 from sqlalchemy.exc import IntegrityError
@@ -13,6 +13,9 @@ class User(Base):
     password = Column(Integer, nullable=False)
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
+    # currency_id = Column(Integer, ForeignKey('currency.id'))
+
+    # default_currency = relationship("Currency")
 
     @classmethod
     def get_user_by_email(cls, email: str, password: str, db: Session):

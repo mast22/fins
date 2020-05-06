@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Integer, Numeric, Date, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from app.db.database import Base
+from app.db.models import Base
 from sqlalchemy.orm import Session
 from app.db.models.user import User
 
@@ -12,8 +12,8 @@ class Savings(Base):
     currency_id = Column(String, ForeignKey('currency.id'))
     user_id = Column(Integer, ForeignKey('user.id'))
 
-    currency = relationship("Currency", foreign_keys=[currency_id])
     user = relationship("User", foreign_keys=[user_id])
+    currency = relationship("Currency", foreign_keys=[currency_id])
 
     def __repr__(self):
         return (
@@ -24,7 +24,7 @@ class Savings(Base):
     def get_user_savings(cls, user: User, db: Session):
         return (
             db.query(Savings)
-            .filter(Savings.user == u)
+            .filter(Savings.user == user)
             .order_by(Savings.date.desc())
             .all()
         )

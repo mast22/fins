@@ -7,6 +7,7 @@ class BaseUser(BaseModel):
     email: EmailStr
     is_active: Optional[bool] = True
     is_superuser: bool = False
+    default_currency: str
 
 
 class User(BaseUser):

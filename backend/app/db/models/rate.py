@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Integer, Numeric, Date, ForeignKey
 from sqlalchemy.orm import relationship
-from app.db.database import Base
+from app.db.models import Base
 
 
 class ExchangeRates(Base):

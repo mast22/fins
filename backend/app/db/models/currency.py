@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Integer, Numeric, Date, Boolean
 from sqlalchemy.orm import relationship
-from app.db.database import Base
+from app.db.models import Base
 
 
 class Currency(Base):
