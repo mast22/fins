@@ -11,7 +11,6 @@ class Exchange(BaseModel):
 
 class Currency(BaseModel):
     code: str
-    display: str
     amount: float
     exchange: List[Exchange]
 
@@ -25,6 +24,9 @@ class Column(BaseModel):
     currency: str
     color: str
     desc: str
+
+    class Config:
+        orm_mode = True
 
 
 class Table(BaseModel):
