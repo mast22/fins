@@ -14,43 +14,48 @@ router = APIRouter()
 def main_table(
     current_user: UserSchema = Depends(get_current_user), db=Depends(get_db)
 ):
-    savings = Savings.get_user_savings(current_user, db)
-    columns_holder = Column.get_user_columns_holder(current_user, db)
-    date_range = (savings[0].date, savings[-1].date)
-    exchange_holder = ExchangeRates.get_exchange_holder(date_range, db)
+    # savings_holder = Savings.get_user_savings_holder(current_user, db)
+    # columns_holder = Column.get_user_columns_holder(current_user, db)
+    # date_range = (savings[0].date, savings[-1].date)
+    # exchange_holder = ExchangeRates.get_exchange_holder(date_range, db)
 
-    response_columns = [
-        {"currency": column.currency.code, "color": column.color, "desc": column.desc}
-        for column in columns
-    ]
+    # response_columns = [
+    #     {"currency": column.currency.code, "color": column.color, "desc": column.desc}
+    #     for column in columns
+    # ]
 
-    response_data = []
+    # response_data = []
 
-    for day in savings:
-        currencies = []
-        for currency in day:
-            currencies.append(
-                {
-                    "id": currency.id,
-                    "code": currency.code,
-                    "amount": currency.amount,
-                    "exchange": exchange_holder.get_exchange(
-                        source=currency.code,
-                        targets=columns.get_targets_against(currency=currency),
-                    ),
-                }
-            )
-        query_day = {"date": day.date, "currencies": currencies}
-        response_data.append()
+    # for day in savings:
+    #     currencies = []
+    #     for currency in day:
+    #         currencies.append(
+    #             {
+    #                 "id": currency.id,
+    #                 "code": currency.code,
+    #                 "amount": currency.amount,
+    #                 "exchange": exchange_holder.get_exchange(
+    #                     source=currency.code,
+    #                     targets=columns.get_targets_against(currency=currency),
+    #                 ),
+    #             }
+    #         )
+    #     query_day = {"date": day.date, "currencies": currencies}
+    #     response_data.append()
 
     # response = {"columns": response_columns, "data": response_data}
 
     # TODO доделать
     return {
         "columns": [
-            {"currency": "RUB", "color": "8B0000", "desc": "Рублёвый счёт"},
-            {"currency": "USD", "color": "059117", "desc": "Dollars"},
-            {"currency": "EUR", "color": "0000FF", "desc": "Мою любымые евро"},
+            {"id": "1", "currency": "RUB", "color": "8B0000", "desc": "Рублёвый счёт"},
+            {"id": "2", "currency": "USD", "color": "059117", "desc": "Dollars"},
+            {
+                "id": "3",
+                "currency": "EUR",
+                "color": "0000FF",
+                "desc": "Мою любымые евро",
+            },
         ],
         "data": [
             {

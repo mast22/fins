@@ -4,6 +4,26 @@ from app.db.models import Base
 
 from sqlalchemy.orm import Session
 from app.db.models.user import User
+from app.core.utils import attribute_mapper
+
+
+class ColumnHolder:
+    def __init__(self, queryset, cls):
+        self.queryset = queryset
+        self.cls = cls
+
+    def get_columns(self):
+        """Returnc dict columns"""
+        columns = [
+            {
+                "id": column.id,
+                "currency": column.currency.code,
+                "color": column.color,
+                "desc": column.desc,
+            }
+            for column in self.queryset
+        ]
+        return columns
 
 
 class Column(Base):
@@ -21,5 +41,6 @@ class Column(Base):
         return f'<Column user={self.user.id} currency={self.currency.code}>'
 
     @classmethod
-    def get_user_columns(cls, user: User, db: Session):
-        return db.query(cls).filter(cls.user == user).order_by(cls.order)
+    def get_user_columns_holder(cls, user: User, db: Session):
+        queryset = db.query(cls).filter(cls.user == user).order_by(cls.order)
+        return ColumnHolder(queryset, cls)

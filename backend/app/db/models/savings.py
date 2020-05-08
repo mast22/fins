@@ -8,6 +8,21 @@ from operator import attrgetter
 from itertools import groupby
 
 
+class SavingsHolder:
+    def __init__(self, queryset, cls):
+        self.queryset = queryset
+        self.cls = cls
+
+    def get_date_range(self):
+        pass
+
+    def get_date_ends(self):
+        pass
+
+    def get_savings(self):
+        pass
+
+
 class Savings(Base):
     id = Column(Integer, primary_key=True)
     date = Column(Date)
@@ -19,18 +34,14 @@ class Savings(Base):
     currency = relationship("Currency", foreign_keys=[currency_id])
 
     def __repr__(self):
-        return (
-            f"<Savings date={self.date} amount={self.amount} currency={self.currency.code}>"
-        )
+        return f"<Savings date={self.date} amount={self.amount} currency={self.currency.code}>"
 
     @classmethod
     def get_user_savings(cls, user: User, db: Session):
-
         queryset = (
             db.query(cls).filter(cls.user == user).order_by(cls.date.desc()).all()
         )
-
-        return [list(g) for k, g in groupby(queryset, attrgetter('date'))]
+        return SavingsHolder(queryset, cls)
 
     # s.query(Savings).filter(Savings.user==u).order_by(Savings.date.desc()).all()
     # from operator import attrgetter

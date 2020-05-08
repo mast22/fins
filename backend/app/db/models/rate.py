@@ -2,11 +2,7 @@ from sqlalchemy import Column, String, Integer, Numeric, Date, ForeignKey
 from sqlalchemy.orm import relationship, Session
 from app.db.models import Base
 from typing import Tuple, List
-
-
-def attribute_mapper(l, atr='id'):
-    """ Retrieves attribute value for each element in list or tuple """
-    return [getattr(atr_l, atr) for atr_l in l]
+from app.core.utils import attribute_mapper
 
 
 class ExchangeHolder:
@@ -20,10 +16,8 @@ class ExchangeHolder:
         self.cls = cls
         self.date_range = date_range
 
-    def get_exchange(self, source, targets, date) -> List:
-        """Returns target rates for source in form of dict"""
-        # in_() is not yet supported for relationships in sqlalchemy
-
+    def get_exchange_rates(self, source, targets, date) -> List:
+        """Returns dict exchange rates"""
         if not date_range[0] < date < date_range[1]:
             assert False, 'Wrong date requested'
 
