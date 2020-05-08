@@ -1,8 +1,11 @@
 from sqlalchemy import Column, String, Integer, Numeric, Date, ForeignKey
 from sqlalchemy.orm import relationship, Session
+from sqlalchemy.orm.query import Query
 from app.db.models import Base
-from typing import Tuple, List
+from typing import Tuple, List, Dict
 from app.core.utils import attribute_mapper
+from app.db.models.currency import Currency
+import datetime
 
 
 class ExchangeHolder:
@@ -11,14 +14,16 @@ class ExchangeHolder:
     TODO: check if it lazy-loaded to prevent extra fetching
     """
 
-    def __init__(self, queryset, cls, date_range):
+    def __init__(self, queryset: Query, cls, date_range: Tuple):
         self.queryset = queryset
         self.cls = cls
         self.date_range = date_range
 
-    def get_exchange_rates(self, source, targets, date) -> List:
+    def get_exchange(
+        self, source: Currency, targets: List[Currency], date: datetime
+    ) -> List[Dict]:
         """Returns dict exchange rates"""
-        if not date_range[0] < date < date_range[1]:
+        if not (self.date_range[1] <= date <= self.date_range[0]):
             assert False, 'Wrong date requested'
 
         targets_id = attribute_mapper(targets)
@@ -27,6 +32,7 @@ class ExchangeHolder:
             & (self.cls.target_id.in_(targets_id))
             & (self.cls.date == date)
         )
+
         return [{"code": rate.target.code, "price": rate.rate} for rate in sub_query]
 
 
@@ -52,7 +58,7 @@ class ExchangeRates(Base):
     def get_exchange_holder(
         cls, date_range: Tuple, currencies: Tuple, db: Session
     ) -> ExchangeHolder:
-        start_date, end_date = date_range
+        end_date, start_date = date_range
 
         # in_() is not yet supported for relationships in sqlalchemy
         currencies_id = attribute_mapper(currencies)
@@ -74,7 +80,6 @@ class ExchangeRates(Base):
 # s = datetime.datetime.now() - datetime.timedelta(days=4)
 # e = datetime.datetime.now() - datetime.timedelta(days=1)
 # date_range = (s, e)
-# TODO Можно выгрузить не просто 2 даты, а допустим объект в котором будет range и крайние точки
 # c = ses.query(Currency).all()
 # e = ExchangeRates.get_exchange_holder(date_range=date_range, currencies=c, db=ses)
 

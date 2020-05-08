@@ -6,10 +6,16 @@ from typing import Any
 class Base:
     id: Any
     __name__: str
-    # Generate __tablename__ automatically
+
     @declared_attr
+    # Generate __tablename__ automatically
     def __tablename__(cls) -> str:
         return cls.__name__.lower()
+
+    @declared_attr
+    # # Generate __repr__ automatically
+    def __repr__(cls) -> str:
+        return f'<{cls.__name__}>'
 
 
 from app.db.models.currency import Currency

@@ -7,20 +7,32 @@ from app.db.models.user import User
 from operator import attrgetter
 from itertools import groupby
 
+from typing import List, Tuple
+
 
 class SavingsHolder:
     def __init__(self, queryset, cls):
         self.queryset = queryset
         self.cls = cls
 
-    def get_date_range(self):
-        pass
+        self.date_range = []
+        self.savings = []
+        self.builder()
 
-    def get_date_ends(self):
-        pass
+    def builder(self):
+        """Initializes inside data"""
+        for key, group in groupby(self.queryset, attrgetter('date')):
+            self.date_range.append(key)
+            self.savings.append(list(group))
 
-    def get_savings(self):
-        pass
+    def get_date_range(self) -> List:
+        return self.date_range
+
+    def get_date_ends(self) -> Tuple:
+        return (self.date_range[0], self.date_range[-1])
+
+    def get_savings(self) -> List[List]:
+        return self.savings
 
 
 class Savings(Base):
@@ -37,7 +49,7 @@ class Savings(Base):
         return f"<Savings date={self.date} amount={self.amount} currency={self.currency.code}>"
 
     @classmethod
-    def get_user_savings(cls, user: User, db: Session):
+    def get_user_savings_holder(cls, user: User, db: Session) -> SavingsHolder:
         queryset = (
             db.query(cls).filter(cls.user == user).order_by(cls.date.desc()).all()
         )
