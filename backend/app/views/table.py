@@ -1,6 +1,4 @@
 from fastapi import APIRouter, Depends
-from app.schemas.table import Table
-from app.schemas.table import Column as ColumnSchema
 from app.schemas.users import User as UserSchema
 from app.db.deps import get_current_user, get_db
 from app.db.models.savings import Savings
