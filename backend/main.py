@@ -1,4 +1,3 @@
-import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from app.views.users import router as users_router
@@ -21,6 +20,3 @@ app.add_middleware(
 
 app.include_router(users_router, prefix='/users')
 app.include_router(table_router, prefix='/table')
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8001)

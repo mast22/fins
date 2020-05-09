@@ -55,6 +55,11 @@ class Savings(Base):
         )
         return SavingsHolder(queryset, cls)
 
+    @classmethod
+    def update_savings(cls, db: Session, savings: List):
+        db.bulk_update_mappings(cls, savings)
+        db.commit()
+
     # s.query(Savings).filter(Savings.user==u).order_by(Savings.date.desc()).all()
     # from operator import attrgetter
     # from itertools import groupby

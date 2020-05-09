@@ -1,9 +1,12 @@
 from fastapi import APIRouter, Depends
 from app.schemas.users import User as UserSchema
+from app.schemas.table import TablePost
 from app.db.deps import get_current_user, get_db
 from app.db.models.savings import Savings
 from app.db.models.column import Column
 from app.db.models.rate import ExchangeRates
+from fastapi.encoders import jsonable_encoder
+from fastapi.exceptions import HTTPException
 
 router = APIRouter()
 
@@ -46,21 +49,22 @@ def main_table(
 
 @router.post("/")
 def change_main_table(
-    current_user: UserSchema = Depends(get_current_user), db=Depends(get_db)
+    *,
+    current_user: UserSchema = Depends(get_current_user),
+    db=Depends(get_db),
+    data: TablePost,
 ):
-    """
-    {
-        "columns": [],
-        "savings": [
-            {
-                "id": 1,
-                "value": 1234,
-            },
-            {
-                "id": 2,
-                "value": 1234.23,
-            },
-        ]
-    }
-    """
-    return 'Not Implemented yet'
+    try:
+        Savings.update_savings(db=db, savings=data.dict()['savings'])
+    except Exception as e:
+        raise HTTPException(status_code=400, detail={'error': repr(e)})
+
+    return {'detail': 'Ok!'}
+
+    # {
+    #     "columns": [
+    #         {'id': 1, 'color': '235563', 'desc': 'new description'},
+    #         {'id': 2, 'color': '235563', 'desc': 'new description'},
+    #     ],
+    #     "savings": [{"id": 1, "amount": 1234,}, {"id": 2, "amount": 1234.23,},],
+    # }
