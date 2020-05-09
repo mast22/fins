@@ -43,5 +43,26 @@ def main_table(
 
     response = {"columns": columns_holder.get_columns(), "data": response_data}
 
-    # TODO доделать
     return response
+
+
+@router.post("/")
+def change_main_table(
+    current_user: UserSchema = Depends(get_current_user), db=Depends(get_db)
+):
+    """
+    {
+        "columns": [],
+        "savings": [
+            {
+                "id": 1,
+                "value": 1234,
+            },
+            {
+                "id": 2,
+                "value": 1234.23,
+            },
+        ]
+    }
+    """
+    return 'Not Implemented yet'

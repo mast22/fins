@@ -28,11 +28,11 @@ def main(populate=False):
         # in case its sqlite based we import path and db_path with sqlite prefix
         from app.core.config import location, db_path
 
-        try:
-            # remove if exist
-            os.remove(location)
-        except:
-            print('Disconnect database')
+        # try:
+        # remove if exist
+        os.remove(location)
+        # except:
+        #     print('Disconnect database')
     else:
         # if its postgres then we connect to it
         from app.core.config import db_path
@@ -60,7 +60,7 @@ def main(populate=False):
 
         savings = []
 
-        for days in range(10):
+        for days in range(3):
             for cur in currencies:
                 for user in users:
                     date = datetime.datetime.now() - datetime.timedelta(days=days)
