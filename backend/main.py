@@ -5,10 +5,7 @@ from app.views.table import router as table_router
 
 app = FastAPI()
 
-origins = [
-    'http://localhost',
-    'http://localhost:8080',
-]
+origins = ['*']
 
 app.add_middleware(
     CORSMiddleware,
