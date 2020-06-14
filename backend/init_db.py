@@ -10,7 +10,7 @@ from app.db.models.currency import Currency
 from app.db.models.savings import Savings
 from app.db.models.rate import ExchangeRates
 from app.db.models.user import User
-from app.db.models.column import Column
+from app.db.models.saving_set import SavingsSet
 
 from app.auth.security import hash_pass
 from app.db.database import SessionLocal, engine
@@ -73,27 +73,27 @@ def main(populate=False):
         session.add_all(savings)
 
         columns = [
-            Column(
+            SavingsSet(
                 currency=RUB,
                 user=user1,
                 desc='Рублёвый счёт',
-                order='1',
+                order=1,
                 color='8B0000',
             ),
-            Column(currency=EUR, user=user1, desc='Euro', order='2', color='0000FF'),
-            Column(
+            SavingsSet(currency=EUR, user=user1, desc='Euro', order=2, color='0000FF'),
+            SavingsSet(
                 currency=USD,
                 user=user1,
                 desc='$$$$$$$$$$$$$$$$$$$$$',
-                order='3',
+                order=3,
                 color='059117',
             ),
-            Column(currency=RUB, user=user2, desc='Рубли', order='1', color='8B0000'),
-            Column(
+            SavingsSet(currency=RUB, user=user2, desc='Рубли', order=1, color='8B0000'),
+            SavingsSet(
                 currency=USD,
                 user=user2,
                 desc='Рублёвый счёт',
-                order='2',
+                order=2,
                 color='059117',
             ),
         ]

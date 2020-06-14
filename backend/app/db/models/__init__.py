@@ -22,4 +22,4 @@ from app.db.models.currency import Currency
 from app.db.models.savings import Savings
 from app.db.models.rate import ExchangeRates
 from app.db.models.user import User
-from app.db.models.column import Column
+from app.db.models.saving_set import Column

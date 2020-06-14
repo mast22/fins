@@ -1,7 +1,11 @@
 <template>
   <table>
     <tr>
-      <td v-for="column in $store.state.table.columns" :key="column.id">{{ column.desc }}</td>
+      <td
+        v-for="saving_set in $store.state.table.saving_sets"
+        :key="saving_set.id"
+      >{{ saving_set.desc }}</td>
+      <td>Sum</td>
     </tr>
     <Row v-for="row in $store.state.table.data" :key="row.date" v-bind:row="row.savings" />
   </table>

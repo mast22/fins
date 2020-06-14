@@ -56,7 +56,7 @@ class ExchangeRates(Base):
 
     @classmethod
     def get_exchange_holder(
-        cls, date_range: Tuple, currencies: Tuple, db: Session
+        cls, date_range: Tuple, currencies: List, db: Session
     ) -> ExchangeHolder:
         end_date, start_date = date_range
 

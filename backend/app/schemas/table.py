@@ -8,5 +8,5 @@ class Saving(BaseModel):
 
 
 class TablePost(BaseModel):
-    columns: List
+    savings_sets: List
     savings: List[Saving]

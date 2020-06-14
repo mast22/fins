@@ -3,7 +3,7 @@ from app.schemas.users import User as UserSchema
 from app.schemas.table import TablePost
 from app.db.deps import get_current_user, get_db
 from app.db.models.savings import Savings
-from app.db.models.column import Column
+from app.db.models.saving_set import SavingsSet
 from app.db.models.rate import ExchangeRates
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
@@ -16,9 +16,9 @@ def main_table(
     current_user: UserSchema = Depends(get_current_user), db=Depends(get_db)
 ):
     savings_holder = Savings.get_user_savings_holder(current_user, db)
-    columns_holder = Column.get_user_columns_holder(current_user, db)
+    savings_set_holder = SavingsSet.get_user_savings_sets_holder(current_user, db)
     exchange_holder = ExchangeRates.get_exchange_holder(
-        savings_holder.get_date_ends(), columns_holder.get_currencies(), db
+        savings_holder.get_date_ends(), savings_set_holder.get_currencies(), db
     )
 
     response_data = []
@@ -34,7 +34,7 @@ def main_table(
                     "exchange": exchange_holder.get_exchange(
                         date=saving.date,
                         source=saving.currency,
-                        targets=columns_holder.get_currencies_against(
+                        targets=savings_set_holder.get_currencies_against(
                             currency=saving.currency
                         ),
                     ),
@@ -42,7 +42,7 @@ def main_table(
             )
         response_data.append({"date": saving.date, "savings": savings})
 
-    response = {"columns": columns_holder.get_columns(), "data": response_data}
+    response = {"saving_sets": savings_set_holder.get_savings_sets(), "data": response_data}
 
     return response
 
@@ -60,11 +60,3 @@ def change_main_table(
         raise HTTPException(status_code=400, detail={'error': repr(e)})
 
     return {'detail': 'Ok!'}
-
-    # {
-    #     "columns": [
-    #         {'id': 1, 'color': '235563', 'desc': 'new description'},
-    #         {'id': 2, 'color': '235563', 'desc': 'new description'},
-    #     ],
-    #     "savings": [{"id": 1, "amount": 1234,}, {"id": 2, "amount": 1234.23,},],
-    # }
